@@ -9,11 +9,12 @@ on:
 jobs:
   build-and-healthcheck:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
@@ -22,13 +23,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flask
-        working-directory: osid-front
 
-      - name: Start HTTP server
+      - name: Start Python server
         run: |
-          nohup python server.py &
+          nohup python main.py &   # main.py 가 앱 엔트리포인트라면 여기에
           sleep 5
-        working-directory: osid-front
 
       - name: Health check
-        run: curl --fail http://localhost:5000/health
+        run: |
+          curl --fail http://localhost:5000/health
