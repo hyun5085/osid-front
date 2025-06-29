@@ -9,33 +9,26 @@ on:
 jobs:
   build-and-healthcheck:
     runs-on: ubuntu-latest
-
     steps:
-      # 1) 소스 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2) Python 세팅
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # 3) 의존성 설치
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install flask
-        working-directory: ./  # 필요하다면 경로 조정
+        working-directory: osid-front
 
-      # 4) 서버 띄우기 (백그라운드)
-      - name: Start Flask server
+      - name: Start HTTP server
         run: |
           nohup python server.py &
           sleep 5
-        working-directory: ./  # server.py 가 있는 위치
+        working-directory: osid-front
 
-      # 5) 헬스체크
       - name: Health check
-        run: |
-          curl --fail http://localhost:5000/health
+        run: curl --fail http://localhost:5000/health
