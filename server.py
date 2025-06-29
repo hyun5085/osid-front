@@ -32,10 +32,10 @@ class StableHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 def start_server():
-    PORT = 80
+    PORT = int(os.environ.get("PORT", 5000))
     workspace = os.environ.get('GITHUB_WORKSPACE', os.getcwd())
     os.chdir(workspace)
-    
+
     try:
         with socketserver.TCPServer(("0.0.0.0", PORT), StableHandler) as httpd:
             print(f"프리미어 자동차 서버 시작 - 포트 {PORT}")
