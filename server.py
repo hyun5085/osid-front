@@ -33,7 +33,8 @@ class StableHandler(http.server.SimpleHTTPRequestHandler):
 
 def start_server():
     PORT = 80
-    os.chdir('/home/runner/workspace')
+    workspace = os.environ.get('GITHUB_WORKSPACE', os.getcwd())
+    os.chdir(workspace)
     
     try:
         with socketserver.TCPServer(("0.0.0.0", PORT), StableHandler) as httpd:
