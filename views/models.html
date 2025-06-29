@@ -1,0 +1,418 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-white">Car Models</h2>
+                    <p class="text-muted">Manage available car models and specifications</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" id="addModelBtn">
+                        <i class="fas fa-plus me-2"></i>Add Model
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="modelSearchInput" class="form-label">Search Models</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control" id="modelSearchInput" placeholder="Model name, make...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="makeFilter" class="form-label">Make</label>
+                    <select class="form-select" id="makeFilter">
+                        <option value="">All Makes</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="statusFilter" class="form-label">Status</label>
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-outline-primary" id="applyFiltersBtn">
+                        <i class="fas fa-filter me-1"></i>Apply
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Models Grid -->
+    <div class="row" id="modelsGrid">
+        <!-- Models will be loaded here -->
+        <div class="col-12 text-center text-muted py-5">
+            <i class="fas fa-spinner fa-spin fa-3x mb-3"></i>
+            <p>Loading car models...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Model Modal -->
+<div class="modal fade" id="modelFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modelFormTitle">
+                    <i class="fas fa-car me-2"></i>Add New Model
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modelForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="modelMake" class="form-label">Make *</label>
+                            <input type="text" class="form-control" id="modelMake" name="make" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modelName" class="form-label">Model Name *</label>
+                            <input type="text" class="form-control" id="modelName" name="name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="modelYear" class="form-label">Year *</label>
+                            <input type="number" class="form-control" id="modelYear" name="year" min="1900" max="2030" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="modelPrice" class="form-label">Base Price *</label>
+                            <input type="number" class="form-control" id="modelPrice" name="basePrice" step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="modelStatus" class="form-label">Status *</label>
+                            <select class="form-select" id="modelStatus" name="status" required>
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="modelEngine" class="form-label">Engine</label>
+                            <input type="text" class="form-control" id="modelEngine" name="engine">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modelTransmission" class="form-label">Transmission</label>
+                            <select class="form-select" id="modelTransmission" name="transmission">
+                                <option value="">Select Transmission</option>
+                                <option value="MANUAL">Manual</option>
+                                <option value="AUTOMATIC">Automatic</option>
+                                <option value="CVT">CVT</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="modelFuelType" class="form-label">Fuel Type</label>
+                            <select class="form-select" id="modelFuelType" name="fuelType">
+                                <option value="">Select Fuel Type</option>
+                                <option value="GASOLINE">Gasoline</option>
+                                <option value="DIESEL">Diesel</option>
+                                <option value="HYBRID">Hybrid</option>
+                                <option value="ELECTRIC">Electric</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="modelSeats" class="form-label">Seats</label>
+                            <input type="number" class="form-control" id="modelSeats" name="seats" min="2" max="12">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="modelBodyType" class="form-label">Body Type</label>
+                            <select class="form-select" id="modelBodyType" name="bodyType">
+                                <option value="">Select Body Type</option>
+                                <option value="SEDAN">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="HATCHBACK">Hatchback</option>
+                                <option value="COUPE">Coupe</option>
+                                <option value="CONVERTIBLE">Convertible</option>
+                                <option value="WAGON">Wagon</option>
+                                <option value="TRUCK">Truck</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="modelDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="modelDescription" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="modelFeatures" class="form-label">Key Features</label>
+                        <textarea class="form-control" id="modelFeatures" name="features" rows="2" placeholder="Separate features with commas"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="modelForm" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Save Model
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Models page functionality
+let currentEditingModelId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadModels();
+    
+    // Setup event listeners
+    document.getElementById('addModelBtn')?.addEventListener('click', function() {
+        showModelForm();
+    });
+    
+    document.getElementById('modelForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveModel();
+    });
+    
+    document.getElementById('applyFiltersBtn')?.addEventListener('click', function() {
+        loadModels();
+    });
+    
+    // Setup search with debounce
+    const searchInput = document.getElementById('modelSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', utils.debounce(loadModels, 500));
+    }
+});
+
+async function loadModels() {
+    try {
+        const searchTerm = document.getElementById('modelSearchInput')?.value || '';
+        const make = document.getElementById('makeFilter')?.value || '';
+        const status = document.getElementById('statusFilter')?.value || '';
+        
+        const params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (make) params.make = make;
+        if (status) params.status = status;
+        
+        const response = await api.models.getAll(params);
+        const models = response.data || [];
+        
+        const modelsGrid = document.getElementById('modelsGrid');
+        
+        if (models.length === 0) {
+            modelsGrid.innerHTML = `
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="fas fa-car fa-3x mb-3"></i>
+                    <h4>No Models Found</h4>
+                    <p>Start by adding your first car model!</p>
+                    <button class="btn btn-primary" onclick="showModelForm()">
+                        <i class="fas fa-plus me-2"></i>Add First Model
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Update make filter options
+        updateMakeFilter(models);
+        
+        const modelsHTML = models.map(model => `
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title">${model.make} ${model.name}</h5>
+                            ${utils.getStatusBadge(model.status)}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="row text-sm">
+                                <div class="col-6">
+                                    <strong>Year:</strong> ${model.year || 'N/A'}
+                                </div>
+                                <div class="col-6">
+                                    <strong>Price:</strong> ${utils.formatCurrency(model.basePrice)}
+                                </div>
+                            </div>
+                            <div class="row text-sm mt-2">
+                                <div class="col-6">
+                                    <strong>Engine:</strong> ${model.engine || 'N/A'}
+                                </div>
+                                <div class="col-6">
+                                    <strong>Fuel:</strong> ${model.fuelType || 'N/A'}
+                                </div>
+                            </div>
+                            ${model.bodyType ? `
+                            <div class="row text-sm mt-2">
+                                <div class="col-6">
+                                    <strong>Body:</strong> ${model.bodyType}
+                                </div>
+                                <div class="col-6">
+                                    <strong>Seats:</strong> ${model.seats || 'N/A'}
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        ${model.description ? `<p class="text-muted small">${model.description}</p>` : ''}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="btn-group w-100">
+                            <button class="btn btn-outline-primary btn-sm" onclick="editModel(${model.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-outline-info btn-sm" onclick="viewModelDetails(${model.id})">
+                                <i class="fas fa-eye"></i> Details
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteModel(${model.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        modelsGrid.innerHTML = modelsHTML;
+        
+    } catch (error) {
+        console.error('Error loading models:', error);
+        document.getElementById('modelsGrid').innerHTML = `
+            <div class="col-12 text-center text-danger py-5">
+                <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                <h4>Error Loading Models</h4>
+                <p>Please try again later.</p>
+            </div>
+        `;
+    }
+}
+
+function updateMakeFilter(models) {
+    const makeFilter = document.getElementById('makeFilter');
+    if (!makeFilter) return;
+    
+    const currentValue = makeFilter.value;
+    const makes = [...new Set(models.map(model => model.make).filter(make => make))];
+    
+    makeFilter.innerHTML = '<option value="">All Makes</option>' + 
+        makes.map(make => `<option value="${make}">${make}</option>`).join('');
+    
+    if (currentValue && makes.includes(currentValue)) {
+        makeFilter.value = currentValue;
+    }
+}
+
+function showModelForm(modelData = null) {
+    const modal = new bootstrap.Modal(document.getElementById('modelFormModal'));
+    const title = document.getElementById('modelFormTitle');
+    const form = document.getElementById('modelForm');
+    
+    if (modelData) {
+        title.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Model';
+        currentEditingModelId = modelData.id;
+        
+        // Populate form with model data
+        Object.keys(modelData).forEach(key => {
+            const field = document.getElementById('model' + key.charAt(0).toUpperCase() + key.slice(1));
+            if (field && modelData[key] !== null && modelData[key] !== undefined) {
+                field.value = modelData[key];
+            }
+        });
+    } else {
+        title.innerHTML = '<i class="fas fa-car me-2"></i>Add New Model';
+        currentEditingModelId = null;
+        form.reset();
+        // Set default values
+        document.getElementById('modelStatus').value = 'ACTIVE';
+    }
+    
+    modal.show();
+}
+
+async function saveModel() {
+    try {
+        const form = document.getElementById('modelForm');
+        const formData = new FormData(form);
+        const modelData = {};
+        
+        for (const [key, value] of formData.entries()) {
+            if (value !== '') {
+                modelData[key] = value;
+            }
+        }
+        
+        // Validate form
+        const errors = utils.validateForm(form);
+        if (errors.length > 0) {
+            utils.showToast('Please fix the form errors: ' + errors.join(', '), 'error');
+            return;
+        }
+        
+        let response;
+        if (currentEditingModelId) {
+            response = await api.models.update(currentEditingModelId, modelData);
+        } else {
+            response = await api.models.create(modelData);
+        }
+        
+        if (response) {
+            utils.showToast('Model saved successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modelFormModal')).hide();
+            loadModels(); // Refresh the models list
+        }
+        
+    } catch (error) {
+        console.error('Error saving model:', error);
+        utils.showToast('Error saving model. Please try again.', 'error');
+    }
+}
+
+async function editModel(modelId) {
+    try {
+        const response = await api.models.getById(modelId);
+        if (response && response.data) {
+            showModelForm(response.data);
+        }
+    } catch (error) {
+        console.error('Error loading model details:', error);
+        utils.showToast('Error loading model details', 'error');
+    }
+}
+
+async function deleteModel(modelId) {
+    utils.showConfirmModal(
+        'Delete Model',
+        'Are you sure you want to delete this car model? This action cannot be undone.',
+        async () => {
+            try {
+                await api.models.delete(modelId);
+                utils.showToast('Model deleted successfully!', 'success');
+                loadModels(); // Refresh the models list
+            } catch (error) {
+                console.error('Error deleting model:', error);
+                utils.showToast('Error deleting model. Please try again.', 'error');
+            }
+        }
+    );
+}
+
+function viewModelDetails(modelId) {
+    // This would show a detailed view of the model
+    console.log('View model details:', modelId);
+    utils.showToast('Model details view coming soon!', 'info');
+}
+</script>

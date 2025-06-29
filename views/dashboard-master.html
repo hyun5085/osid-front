@@ -1,0 +1,155 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 text-white">Master Dashboard</h1>
+                    <p class="text-muted">System administration and overview</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary me-2" id="manageUsersBtn">
+                        <i class="fas fa-users me-2"></i>Manage Users
+                    </button>
+                    <button class="btn btn-outline-primary" id="manageDealersBtn">
+                        <i class="fas fa-store me-2"></i>Manage Dealers
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalUsers">0</div>
+                <div class="stats-label">Total Users</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalDealers">0</div>
+                <div class="stats-label">Total Dealers</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalModels">0</div>
+                <div class="stats-label">Car Models</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalOrders">0</div>
+                <div class="stats-label">Total Orders</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Overview -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>System Overview
+                    </h5>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-primary active">Recent Orders</button>
+                        <button class="btn btn-sm btn-outline-primary">Analytics</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Dealer</th>
+                                    <th>Car Model</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="systemOrders">
+                                <!-- Orders will be loaded here -->
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                                        <br>Loading system data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Tools -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>Management Tools
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-primary" onclick="app.router.navigate('users')">
+                                    <i class="fas fa-users mb-2 d-block"></i>
+                                    Users
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-info" onclick="app.router.navigate('dealers')">
+                                    <i class="fas fa-store mb-2 d-block"></i>
+                                    Dealers
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-success" onclick="app.router.navigate('models')">
+                                    <i class="fas fa-car mb-2 d-block"></i>
+                                    Models
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-warning" onclick="app.router.navigate('options')">
+                                    <i class="fas fa-cogs mb-2 d-block"></i>
+                                    Options
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-danger" onclick="app.router.navigate('orders')">
+                                    <i class="fas fa-clipboard-list mb-2 d-block"></i>
+                                    Orders
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-secondary" onclick="app.router.navigate('profile')">
+                                    <i class="fas fa-user-edit mb-2 d-block"></i>
+                                    Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

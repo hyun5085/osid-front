@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Dashboard - OSID</title>
+    
+    <!-- Bootstrap CSS with Dark Theme -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Navigation Styles */
+        .custom-navbar {
+            background: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 45px 8px 20px;
+            color: white;
+            width: 100%;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            color: white;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .master-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            font-size: 1.5rem;
+        }
+
+        .data-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-collapse: collapse;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #2980b9;
+        }
+
+        .modal-content {
+            background: #2c3e50;
+            border: none;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #3498db;
+            color: white;
+        }
+
+        .form-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/attached_assets/Tim Logo white_1751050861593.png" alt="OSID" style="height: 40px;">
+            </a>
+            
+            <div class="search-container mx-auto">
+                <input type="text" class="search-input" placeholder="검색어를 입력하세요...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-link text-white dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-user-circle me-2"></i>
+                    <span id="userDisplayName">Master User</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="/views/my-page.html">마이페이지</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="container">
+            <!-- Master Header -->
+            <div class="master-header">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="mb-2">Master Dashboard</h1>
+                        <p class="mb-0">OSID 차량 주문 관리 시스템</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="d-flex flex-column">
+                            <small class="opacity-75">마지막 로그인</small>
+                            <span id="lastLoginTime">2024-12-28 09:30</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-won-sign"></i>
+                    </div>
+                    <div class="stat-value" id="monthlyRevenue">₩0</div>
+                    <div class="stat-label">이번 달 매출</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-value" id="newSignups">0</div>
+                    <div class="stat-label">신규 가입</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="stat-value" id="soldCars">0</div>
+                    <div class="stat-label">판매 완료 차량</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="stat-value" id="activeDealers">0</div>
+                    <div class="stat-label">활성 딜러</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-bolt"></i>
+                    빠른 작업
+                </div>
+                <div class="quick-actions">
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openModelRegistration()">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <span>모델 등록</span>
+                    </a>
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openOptionRegistration()">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <span>옵션 등록</span>
+                    </a>
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openDealerManagement()">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <span>딜러 관리</span>
+                    </a>
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openUserManagement()">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span>사용자 관리</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Orders Section -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    최근 주문 현황
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>주문번호</th>
+                                <th>고객명</th>
+                                <th>차량모델</th>
+                                <th>주문일시</th>
+                                <th>상태</th>
+                                <th>금액</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dealer Management Modal -->
+    <div class="modal fade" id="dealerManagementModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">딜러 관리</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>딜러명</th>
+                                    <th>지점</th>
+                                    <th>연락처</th>
+                                    <th>이메일</th>
+                                    <th>상태</th>
+                                    <th>등록일</th>
+                                    <th>관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dealerTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">딜러 목록을 불러오는 중...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Registration Modal -->
+    <div class="modal fade" id="modelRegistrationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">모델 등록</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modelRegistrationForm">
+                        <div class="mb-3">
+                            <label class="form-label text-white">모델명</label>
+                            <input type="text" class="form-control" id="modelName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">카테고리</label>
+                            <select class="form-select" id="modelCategory" required>
+                                <option value="">선택하세요</option>
+                                <option value="SEDAN">세단</option>
+                                <option value="SUV">SUV</option>
+                                <option value="ELECTRIC">전기차</option>
+                                <option value="HYBRID">하이브리드</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">가격 (원)</label>
+                            <input type="number" class="form-control" id="modelPrice" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="submitModelRegistration()">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option Registration Modal -->
+    <div class="modal fade" id="optionRegistrationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">옵션 등록</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="optionRegistrationForm">
+                        <div class="mb-3">
+                            <label class="form-label text-white">옵션명</label>
+                            <input type="text" class="form-control" id="optionName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">카테고리</label>
+                            <select class="form-select" id="optionCategory" required>
+                                <option value="">선택하세요</option>
+                                <option value="NAVIGATION">내비게이션</option>
+                                <option value="SUNROOF">선루프</option>
+                                <option value="HEATED_SEATS">열선시트</option>
+                                <option value="LEATHER_SEATS">가죽시트</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">가격 (원)</label>
+                            <input type="number" class="form-control" id="optionPrice" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="submitOptionRegistration()">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 전역 변수
+        const API_BASE_URL = 'http://localhost:8080/api';
+
+        // 딜러 관리 모달 열기
+        function openDealerManagement() {
+            const modal = new bootstrap.Modal(document.getElementById('dealerManagementModal'));
+            modal.show();
+            loadDealersData();
+        }
+
+        // 딜러 목록 로드
+        async function loadDealersData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/masters/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const masterData = await response.json();
+                const dealers = masterData.dealerList || [];
+                updateDealerTable(dealers);
+                
+            } catch (error) {
+                console.error('딜러 목록 로드 오류:', error);
+                const tbody = document.getElementById('dealerTableBody');
+                if (tbody) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">딜러 목록을 불러올 수 없습니다.</td></tr>';
+                }
+            }
+        }
+
+        // 딜러 테이블 업데이트
+        function updateDealerTable(dealers) {
+            const tbody = document.getElementById('dealerTableBody');
+            
+            if (!tbody) {
+                console.error('딜러 테이블 tbody를 찾을 수 없습니다.');
+                return;
+            }
+            
+            if (dealers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">등록된 딜러가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = dealers.map(dealer => {
+                let statusBadge;
+                switch(dealer.role) {
+                    case 'DEALER':
+                        statusBadge = '<span class="badge bg-success">승인됨</span>';
+                        break;
+                    case 'APPLICANT':
+                        statusBadge = '<span class="badge bg-warning">승인대기</span>';
+                        break;
+                    default:
+                        statusBadge = '<span class="badge bg-secondary">알 수 없음</span>';
+                }
+                
+                return `
+                    <tr>
+                        <td>${dealer.name || 'N/A'}</td>
+                        <td>${dealer.branch || 'N/A'}</td>
+                        <td>${dealer.phoneNumber || 'N/A'}</td>
+                        <td>${dealer.email || 'N/A'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${dealer.createdAt ? new Date(dealer.createdAt).toLocaleDateString() : 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="manageDealerStatus('${dealer.email}', '${dealer.name}')">관리</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 모델 등록 모달 열기
+        function openModelRegistration() {
+            const modal = new bootstrap.Modal(document.getElementById('modelRegistrationModal'));
+            modal.show();
+        }
+
+        // 모델 등록 제출
+        async function submitModelRegistration() {
+            const form = document.getElementById('modelRegistrationForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const modelData = {
+                name: document.getElementById('modelName').value,
+                category: document.getElementById('modelCategory').value,
+                price: parseInt(document.getElementById('modelPrice').value)
+            };
+
+            try {
+                console.log('모델 등록 데이터:', modelData);
+                alert('모델이 성공적으로 등록되었습니다!');
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modelRegistrationModal'));
+                modal.hide();
+                form.reset();
+                
+            } catch (error) {
+                console.error('모델 등록 오류:', error);
+                alert('모델 등록 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 옵션 등록 모달 열기
+        function openOptionRegistration() {
+            const modal = new bootstrap.Modal(document.getElementById('optionRegistrationModal'));
+            modal.show();
+        }
+
+        // 옵션 등록 제출
+        async function submitOptionRegistration() {
+            const form = document.getElementById('optionRegistrationForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const optionData = {
+                name: document.getElementById('optionName').value,
+                category: document.getElementById('optionCategory').value,
+                price: parseInt(document.getElementById('optionPrice').value)
+            };
+
+            try {
+                console.log('옵션 등록 데이터:', optionData);
+                alert('옵션이 성공적으로 등록되었습니다!');
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('optionRegistrationModal'));
+                modal.hide();
+                form.reset();
+                
+            } catch (error) {
+                console.error('옵션 등록 오류:', error);
+                alert('옵션 등록 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 사용자 관리 모달 열기
+        function openUserManagement() {
+            alert('사용자 관리 기능은 준비 중입니다.');
+        }
+
+        // 딜러 상태 관리
+        function manageDealerStatus(email, name) {
+            alert(`${name} 딜러의 상태 관리 기능은 준비 중입니다.`);
+        }
+
+        // 통계 로드
+        async function loadStats() {
+            try {
+                // 임시 데이터로 표시
+                document.getElementById('monthlyRevenue').textContent = '₩125,000,000';
+                document.getElementById('newSignups').textContent = '24';
+                document.getElementById('soldCars').textContent = '18';
+                document.getElementById('activeDealers').textContent = '12';
+                
+            } catch (error) {
+                console.error('통계 로드 오류:', error);
+            }
+        }
+
+        // 최근 주문 로드
+        async function loadRecentOrders() {
+            try {
+                const tbody = document.getElementById('recentOrdersTableBody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td>ORD-001</td>
+                        <td>김철수</td>
+                        <td>Genesis G90</td>
+                        <td>2024-12-28</td>
+                        <td><span class="badge bg-success">완료</span></td>
+                        <td>₩85,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>ORD-002</td>
+                        <td>이영희</td>
+                        <td>BMW X5</td>
+                        <td>2024-12-27</td>
+                        <td><span class="badge bg-warning">진행중</span></td>
+                        <td>₩75,000,000</td>
+                    </tr>
+                `;
+                
+            } catch (error) {
+                console.error('최근 주문 로드 오류:', error);
+            }
+        }
+
+        // 로그아웃
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', async function() {
+            const userName = localStorage.getItem('userName') || 'Master User';
+            document.getElementById('userDisplayName').textContent = userName;
+
+            // 데이터 로드
+            await loadStats();
+            await loadRecentOrders();
+        });
+    </script>
+</body>
+</html>

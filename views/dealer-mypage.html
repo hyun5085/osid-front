@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>딜러 마이페이지 - OSID</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Navigation Styles */
+        .custom-navbar {
+            background: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 45px 8px 20px;
+            color: white;
+            width: 100%;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            color: white;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+        }
+
+        .dealer-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 0.5rem;
+            color: #3498db;
+        }
+
+        .data-table {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: rgba(52, 152, 219, 0.3);
+            color: white;
+            padding: 1rem;
+            border: none;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            color: #ecf0f1;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .quick-action-card:hover {
+            background: rgba(52, 152, 219, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-description {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active { background-color: #27ae60; }
+        .status-pending { background-color: #f39c12; }
+        .status-suspended { background-color: #e74c3c; }
+        .status-completed { background-color: #27ae60; }
+        .status-processing { background-color: #3498db; }
+        .status-cancelled { background-color: #e74c3c; }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .user-details h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .user-details p {
+            margin: 0;
+            color: #bdc3c7;
+        }
+
+        .dealer-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-text {
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand" href="../index.html">
+                <img src="../attached_assets/Tim Logo white_1751051049689.png" alt="OSID">
+            </a>
+            
+            <!-- Center Navigation -->
+            <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link text-white" href="../views/cars.html">CAR</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">구매/이벤트</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../views/consultation.html">구매 상담</a></li>
+                            <li><a class="dropdown-item" href="../views/events.html">이벤트</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">브랜드</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../views/brand-intro.html">브랜드 소개</a></li>
+                            <li><a class="dropdown-item" href="../views/news.html">뉴스 & 업데이트</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Right Side -->
+            <div class="d-flex align-items-center">
+                <!-- Search -->
+                <div class="search-container me-3">
+                    <input type="text" class="search-input" placeholder="검색어를 입력하세요">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <!-- User Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user me-2"></i><span id="userDisplayName">딜러</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="../views/dealer-mypage.html">마이페이지</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">로그아웃</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="container-fluid">
+            <!-- Header -->
+            <div class="dealer-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h2 id="dealerName">김딜러</h2>
+                        <p>딜러 관리 시스템에 오신 것을 환영합니다</p>
+                        <div class="dealer-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="headerSales">23</div>
+                                <div class="stat-text">총 판매</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="headerCustomers">45</div>
+                                <div class="stat-text">고객 수</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="headerRevenue">₩2.3억</div>
+                                <div class="stat-text">매출</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="#" class="quick-action-card" onclick="viewMyOrders()">
+                    <div class="action-icon">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <div class="action-title">내 주문 관리</div>
+                    <div class="action-description">담당 고객의 주문을 관리합니다</div>
+                </a>
+                
+                <a href="#" class="quick-action-card" onclick="viewMyCustomers()">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="action-title">고객 관리</div>
+                    <div class="action-description">담당 고객 정보를 관리합니다</div>
+                </a>
+                
+                <a href="../views/cars.html" class="quick-action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="action-title">차량 카탈로그</div>
+                    <div class="action-description">판매 가능한 차량을 확인합니다</div>
+                </a>
+                
+                <a href="#" class="quick-action-card" onclick="viewSalesReport()">
+                    <div class="action-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-title">판매 리포트</div>
+                    <div class="action-description">나의 판매 실적을 확인합니다</div>
+                </a>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="stat-value" id="totalSales">23</div>
+                    <div class="stat-label">총 판매량</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-won-sign"></i>
+                    </div>
+                    <div class="stat-value" id="totalRevenue">₩2.3억</div>
+                    <div class="stat-label">총 매출</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="totalCustomers">45</div>
+                    <div class="stat-label">총 고객수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value" id="pendingOrders">5</div>
+                    <div class="stat-label">대기중 주문</div>
+                </div>
+            </div>
+
+
+
+            <!-- 딜러 주문 관리 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    주문 관리
+                    <div class="ms-auto">
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="loadDealerOrders()">
+                            <i class="fas fa-refresh me-1"></i>새로고침
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="showCreateOrderModal()">
+                            <i class="fas fa-plus me-1"></i>주문 생성
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>주문번호</th>
+                                <th>고객명</th>
+                                <th>차량모델</th>
+                                <th>주문일시</th>
+                                <th>상태</th>
+                                <th>금액</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dealerOrdersTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">주문 데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- My Customers -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    내 고객 현황
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>고객명</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th>최근 주문</th>
+                                <th>총 구매금액</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center">고객 데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Profile Information -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-user-circle"></i>
+                    내 프로필 정보
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <tbody>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>이메일</strong></td>
+                                        <td id="profileEmail">dealer@example.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>전화번호</strong></td>
+                                        <td id="profilePhone">010-1234-5678</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>지점</strong></td>
+                                        <td id="profileBranch">서울</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <tbody>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>소속 마스터</strong></td>
+                                        <td id="profileMaster">master@example.com</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>가입일</strong></td>
+                                        <td id="profileJoinDate">2024-01-15</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background: rgba(52, 152, 219, 0.3);"><strong>상태</strong></td>
+                                        <td><span class="badge status-active">활성</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="editProfile()">
+                                <i class="fas fa-edit me-2"></i>프로필 수정
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal fade" id="profileEditModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: rgba(0, 0, 0, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">프로필 수정</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileEditForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label text-white">이름</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label text-white">전화번호</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="saveProfile()">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주문 생성 모달 -->
+    <div class="modal fade" id="createOrderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: #000000; border: 1px solid rgba(255, 255, 255, 0.3);">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">새 주문 생성</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createOrderForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">고객 이메일 *</label>
+                                <input type="email" class="form-control" id="userEmail" required
+                                       style="background: #222222; border: 1px solid rgba(255,255,255,0.3); color: white;"
+                                       placeholder="customer@example.com">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-white">차량 모델 *</label>
+                                <select class="form-select" id="modelId" required
+                                        style="background: #222222; border: 1px solid rgba(255,255,255,0.3); color: white;">
+                                    <option value="">모델을 선택하세요</option>
+                                </select>
+                                <small class="text-muted">등록된 차량 모델만 선택 가능합니다</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white">배송 주소 *</label>
+                            <textarea class="form-control" id="address" rows="2" required
+                                      style="background: #222222; border: 1px solid rgba(255,255,255,0.3); color: white;"
+                                      placeholder="차량을 배송받을 주소를 입력하세요"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label text-white">옵션 선택 *</label>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-outline-info me-2" onclick="selectAllOptions()">전체선택</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearAllOptions()">전체해제</button>
+                                </div>
+                            </div>
+                            <div id="optionList" class="mt-2 p-3" style="background: #111111; border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; max-height: 200px; overflow-y: auto;">
+                                <div class="text-center text-muted">옵션 목록을 불러오는 중...</div>
+                            </div>
+                            <div id="selectedOptionsSummary" class="mt-2 p-2" style="background: #003366; border: 1px solid rgba(0,123,255,0.6); border-radius: 5px; color: #87CEEB; font-size: 0.9em;">
+                                선택된 옵션: 0개, 총 가격: ₩0
+                            </div>
+                            <small class="text-muted">필수: 최소 하나 이상의 옵션을 선택하세요</small>
+                        </div>
+
+                        <div class="alert alert-info" style="background: rgba(0,123,255,0.1); border: 1px solid rgba(0,123,255,0.3); color: #87CEEB;">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>참고:</strong> 차량의 색상 정보는 선택한 모델의 기본 설정을 따릅니다.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" onclick="createOrder()">주문 생성</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/api.js"></script>
+    
+    <script>
+        // API 기본 설정
+        const API_BASE_URL = window.location.hostname === 'localhost' ? 
+            'http://localhost:8080/api' :
+            `${window.location.protocol}//${window.location.hostname}:8080/api`;
+
+        // 딜러 프로필 로드
+        async function loadDealerProfile() {
+            try {
+                const dealer = await api.dealers.getProfile();
+                updateProfileDisplay(dealer);
+            } catch (error) {
+                console.error('딜러 프로필 로드 오류:', error);
+            }
+        }
+
+        function updateProfileDisplay(dealer) {
+            // 헤더 정보 업데이트
+            document.getElementById('dealerName').textContent = dealer.name || '딜러';
+            document.getElementById('userDisplayName').textContent = dealer.name || '딜러';
+            
+            // 프로필 테이블 정보 업데이트
+            document.getElementById('profileEmail').textContent = dealer.email || '';
+            document.getElementById('profilePhone').textContent = dealer.phoneNumber || '';
+            document.getElementById('profileBranch').textContent = getBranchName(dealer.branch) || '';
+            document.getElementById('profileMaster').textContent = dealer.masterEmail || '';
+            
+            if (dealer.createdAt) {
+                const date = new Date(dealer.createdAt);
+                document.getElementById('profileJoinDate').textContent = date.toLocaleDateString();
+            }
+
+            // 실제 헤더 통계는 loadDealerStats()에서 처리
+        }
+
+        function getBranchName(branch) {
+            const branchNames = {
+                'SEOUL': '서울',
+                'BUSAN': '부산',
+                'DAEGU': '대구',
+                'INCHEON': '인천',
+                'GWANGJU': '광주',
+                'DAEJEON': '대전',
+                'ULSAN': '울산',
+                'GYEONGGI': '경기',
+                'GANGWON': '강원',
+                'CHUNGBUK': '충북',
+                'CHUNGNAM': '충남',
+                'JEONBUK': '전북',
+                'JEONNAM': '전남',
+                'GYEONGBUK': '경북',
+                'GYEONGNAM': '경남',
+                'JEJU': '제주'
+            };
+            return branchNames[branch] || branch;
+        }
+
+        // 딜러 통계 로드
+        async function loadDealerStats() {
+            try {
+                const stats = await api.request('/api/dealers/stats');
+                document.getElementById('totalSales').textContent = stats.totalSales || '0';
+                document.getElementById('totalRevenue').textContent = '₩' + (stats.totalRevenue || 0).toLocaleString();
+                document.getElementById('totalCustomers').textContent = stats.totalCustomers || '0';
+                document.getElementById('pendingOrders').textContent = stats.pendingOrders || '0';
+            } catch (error) {
+                console.error('통계 로드 오류:', error);
+            }
+        }
+
+        // 딜러 주문 목록 로드
+        async function loadDealerOrders() {
+            try {
+                const response = await api.request('/api/orders');
+                updateDealerOrdersTable(response.content || response);
+            } catch (error) {
+                console.error('딜러 주문 로드 오류:', error);
+                updateDealerOrdersTable([]);
+            }
+        }
+
+        function updateOrdersTable(orders) {
+            const tbody = document.getElementById('recentOrdersTableBody');
+            if (!tbody) return;
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">주문이 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${order.modelName}</td>
+                    <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                    <td><span class="badge ${getStatusClass(order.status)}">${getStatusText(order.status)}</span></td>
+                    <td>₩${order.amount.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewOrderDetail('${order.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 내 고객 로드
+        async function loadMyCustomers() {
+            try {
+                // 데모 데이터
+                const sampleCustomers = [
+                    {
+                        name: '이고객',
+                        email: 'customer1@example.com',
+                        phoneNumber: '010-1111-2222',
+                        lastOrder: '2024-12-28',
+                        totalAmount: 28000000
+                    },
+                    {
+                        name: '박고객',
+                        email: 'customer2@example.com',
+                        phoneNumber: '010-3333-4444',
+                        lastOrder: '2024-12-27',
+                        totalAmount: 65000000
+                    }
+                ];
+
+                updateCustomersTable(sampleCustomers);
+            } catch (error) {
+                console.error('고객 로드 오류:', error);
+            }
+        }
+
+        function updateCustomersTable(customers) {
+            const tbody = document.getElementById('customersTableBody');
+            if (!tbody) return;
+
+            if (customers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">고객이 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = customers.map(customer => `
+                <tr>
+                    <td>${customer.name}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phoneNumber}</td>
+                    <td>${customer.lastOrder}</td>
+                    <td>₩${customer.totalAmount.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="contactCustomer('${customer.email}')">
+                            <i class="fas fa-phone"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusClass(status) {
+            const statusClasses = {
+                'PENDING': 'bg-warning',
+                'PROCESSING': 'bg-info',
+                'COMPLETED': 'bg-success',
+                'CANCELLED': 'bg-danger'
+            };
+            return statusClasses[status] || 'bg-secondary';
+        }
+
+        function getStatusText(status) {
+            const statusTexts = {
+                'PENDING': '대기중',
+                'PROCESSING': '처리중',
+                'COMPLETED': '완료',
+                'CANCELLED': '취소'
+            };
+            return statusTexts[status] || status;
+        }
+
+        // 프로필 수정
+        function editProfile() {
+            const modal = new bootstrap.Modal(document.getElementById('profileEditModal'));
+            
+            // 현재 정보로 폼 채우기
+            document.getElementById('editName').value = document.getElementById('dealerName').textContent;
+            document.getElementById('editPhone').value = document.getElementById('dealerPhone').textContent;
+            
+            modal.show();
+        }
+
+        async function saveProfile() {
+            try {
+                const name = document.getElementById('editName').value;
+                const phoneNumber = document.getElementById('editPhone').value;
+
+                const updateData = { name, phoneNumber };
+
+                await api.dealers.updateProfile(updateData);
+                
+                alert('프로필이 성공적으로 업데이트되었습니다.');
+                bootstrap.Modal.getInstance(document.getElementById('profileEditModal')).hide();
+                loadDealerProfile(); // 프로필 새로고침
+            } catch (error) {
+                console.error('프로필 업데이트 오류:', error);
+                alert('프로필 업데이트 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 빠른 작업 함수들
+        function viewMyOrders() {
+            alert('내 주문 관리 페이지로 이동합니다.');
+        }
+
+        function viewMyCustomers() {
+            alert('고객 관리 페이지로 이동합니다.');
+        }
+
+        function viewSalesReport() {
+            alert('판매 리포트 페이지로 이동합니다.');
+        }
+
+        // 딜러 주문 테이블 업데이트 함수
+        function updateDealerOrdersTable(orders) {
+            const tableBody = document.getElementById('dealerOrdersTableBody');
+            
+            if (!orders || orders.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">주문 데이터가 없습니다.</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = orders.map(order => `
+                <tr>
+                    <td class="fw-bold">${order.id}</td>
+                    <td>${order.user?.name || '고객정보없음'}</td>
+                    <td>${order.model?.name || '차량정보없음'}</td>
+                    <td>${new Date(order.orderDate).toLocaleString('ko-KR')}</td>
+                    <td><span class="badge status-${order.status.toLowerCase()}">${getStatusText(order.status)}</span></td>
+                    <td class="fw-bold">₩${(order.totalAmount || 0).toLocaleString()}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewOrderDetail('${order.id}')" title="상세보기">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning" onclick="editOrder('${order.id}')" title="수정">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="cancelOrder('${order.id}')" title="취소">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 주문 생성 모달 표시
+        async function showCreateOrderModal() {
+            await loadAvailableModels(); // 모델 목록 로드
+            await loadAvailableOptions(); // 옵션 목록 로드
+            const modal = new bootstrap.Modal(document.getElementById('createOrderModal'));
+            modal.show();
+        }
+
+        // 등록된 모델 목록 로드
+        async function loadAvailableModels() {
+            try {
+                const models = await api.models.getAll();
+                const modelSelect = document.getElementById('modelId');
+                
+                // 기존 옵션 제거 (첫 번째 기본 옵션은 유지)
+                modelSelect.innerHTML = '<option value="">모델을 선택하세요</option>';
+                
+                // 모델 옵션 추가
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = `${model.name} (${model.category}) - ₩${model.price.toLocaleString()}`;
+                    modelSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('모델 목록 로드 오류:', error);
+                alert('모델 목록을 불러올 수 없습니다.');
+            }
+        }
+
+        // 등록된 옵션 목록 로드
+        async function loadAvailableOptions() {
+            try {
+                const options = await api.options.getAll();
+                const optionList = document.getElementById('optionList');
+                
+                // 옵션 체크박스 목록 생성
+                if (options && options.length > 0) {
+                    optionList.innerHTML = options.map(option => `
+                        <div class="form-check mb-2 p-2" style="background: #333333; border-radius: 4px;">
+                            <input class="form-check-input" type="checkbox" value="${option.id}" id="option_${option.id}" 
+                                   data-price="${option.price}" onchange="updateOptionsSummary()"
+                                   style="background: #222222; border: 1px solid rgba(255,255,255,0.3);">
+                            <label class="form-check-label text-white" for="option_${option.id}">
+                                <strong>${option.name}</strong> 
+                                <span class="text-muted">(ID: ${option.id})</span>
+                                <br>
+                                <small class="text-info">₩${option.price.toLocaleString()}</small>
+                                <br>
+                                <small class="text-muted">${option.description || '설명 없음'}</small>
+                            </label>
+                        </div>
+                    `).join('');
+                } else {
+                    optionList.innerHTML = '<div class="text-center text-muted">등록된 옵션이 없습니다.</div>';
+                }
+            } catch (error) {
+                console.error('옵션 목록 로드 오류:', error);
+                document.getElementById('optionList').innerHTML = '<div class="text-center text-danger">옵션 목록 로드 중 오류가 발생했습니다.</div>';
+            }
+        }
+
+        // 전체 옵션 선택
+        function selectAllOptions() {
+            const checkboxes = document.querySelectorAll('#optionList input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateOptionsSummary();
+        }
+
+        // 전체 옵션 해제
+        function clearAllOptions() {
+            const checkboxes = document.querySelectorAll('#optionList input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateOptionsSummary();
+        }
+
+        // 선택된 옵션 요약 업데이트
+        function updateOptionsSummary() {
+            const selectedCheckboxes = document.querySelectorAll('#optionList input[type="checkbox"]:checked');
+            const count = selectedCheckboxes.length;
+            
+            let totalPrice = 0;
+            selectedCheckboxes.forEach(checkbox => {
+                const price = parseInt(checkbox.getAttribute('data-price')) || 0;
+                totalPrice += price;
+            });
+
+            const summaryElement = document.getElementById('selectedOptionsSummary');
+            summaryElement.innerHTML = `선택된 옵션: ${count}개, 총 가격: ₩${totalPrice.toLocaleString()}`;
+        }
+
+        // 주문 생성 함수 (백엔드 API: POST /api/dealers/order)
+        async function createOrder() {
+            try {
+                // 폼 데이터 수집
+                const userEmail = document.getElementById('userEmail').value;
+                const modelId = parseInt(document.getElementById('modelId').value);
+                const address = document.getElementById('address').value;
+
+                // 선택된 옵션 ID 수집
+                const selectedOptions = Array.from(document.querySelectorAll('#optionList input[type="checkbox"]:checked'))
+                    .map(checkbox => parseInt(checkbox.value));
+
+                // 필수 필드 검증
+                if (!userEmail || !modelId || !address) {
+                    alert('모든 필수 필드를 입력해주세요.');
+                    return;
+                }
+
+                // 모델 ID가 유효한지 확인
+                if (isNaN(modelId)) {
+                    alert('올바른 모델을 선택해주세요.');
+                    return;
+                }
+
+                // 옵션 선택 확인 (필수)
+                if (selectedOptions.length === 0) {
+                    alert('최소 하나 이상의 옵션을 선택해주세요.');
+                    return;
+                }
+
+                // 실제 백엔드 DTO 구조에 맞춘 주문 데이터
+                const orderData = {
+                    userEmail: userEmail,
+                    option: selectedOptions,    // List<Long>
+                    modelId: modelId,          // Long
+                    address: address           // String
+                };
+
+                const response = await api.request('/api/dealers/order', {
+                    method: 'POST',
+                    body: JSON.stringify(orderData)
+                });
+
+                alert('주문이 성공적으로 생성되었습니다.');
+                bootstrap.Modal.getInstance(document.getElementById('createOrderModal')).hide();
+                
+                // 폼 초기화
+                document.getElementById('createOrderForm').reset();
+                
+                // 주문 목록 새로고침
+                loadDealerOrders();
+            } catch (error) {
+                console.error('주문 생성 오류:', error);
+                alert('주문 생성 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 주문 수정 (백엔드 API: PATCH /api/dealers/order/{orderId})
+        async function editOrder(orderId) {
+            try {
+                await api.request(`/api/dealers/order/${orderId}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        status: 'PROCESSING'
+                    })
+                });
+
+                alert('주문이 수정되었습니다.');
+                loadDealerOrders();
+            } catch (error) {
+                console.error('주문 수정 오류:', error);
+                alert('주문 수정 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 주문 취소 (백엔드 API: POST /api/dealers/order/{orderId}/fail)
+        async function cancelOrder(orderId) {
+            if (!confirm('이 주문을 취소하시겠습니까?')) return;
+
+            try {
+                await api.request(`/api/dealers/order/${orderId}/fail`, {
+                    method: 'POST'
+                });
+
+                alert('주문이 취소되었습니다.');
+                loadDealerOrders();
+            } catch (error) {
+                console.error('주문 취소 오류:', error);
+                alert('주문 취소 중 오류가 발생했습니다.');
+            }
+        }
+
+        function viewOrderDetail(orderId) {
+            alert(`주문 ${orderId}의 상세 정보를 확인합니다.`);
+        }
+
+        function contactCustomer(email) {
+            alert(`고객 ${email}에게 연락합니다.`);
+        }
+
+        // 로그아웃
+        function logout() {
+            if (confirm('로그아웃하시겠습니까?')) {
+                localStorage.clear();
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDealerProfile();
+            loadDealerStats();
+            loadDealerOrders(); // 딜러 주문 관리 로드
+            loadMyCustomers();
+        });
+    </script>
+</body>
+</html>

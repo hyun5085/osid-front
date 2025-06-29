@@ -1,0 +1,142 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 text-white">Welcome back!</h1>
+                    <p class="text-muted">Here's your car order overview</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary me-2" id="newOrderBtn">
+                        <i class="fas fa-plus me-2"></i>New Order
+                    </button>
+                    <button class="btn btn-outline-primary" id="addCarBtn">
+                        <i class="fas fa-car me-2"></i>Add Car
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalOrders">0</div>
+                <div class="stats-label">Total Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="pendingOrders">0</div>
+                <div class="stats-label">Pending Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="completedOrders">0</div>
+                <div class="stats-label">Completed Orders</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card">
+                <div class="stats-number" id="totalCars">0</div>
+                <div class="stats-label">My Cars</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+        <!-- Recent Orders -->
+        <div class="col-lg-7 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>Recent Orders
+                    </h5>
+                    <a href="#" onclick="app.router.navigate('orders')" class="btn btn-sm btn-outline-primary">
+                        View All
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div id="recentOrders">
+                        <!-- Orders will be loaded here -->
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                            <p>Loading orders...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Cars -->
+        <div class="col-lg-5 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-car me-2"></i>My Cars
+                    </h5>
+                    <a href="#" onclick="app.router.navigate('cars')" class="btn btn-sm btn-outline-primary">
+                        Manage Cars
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="myCars">
+                        <!-- Cars will be loaded here -->
+                        <div class="col-12 text-center text-muted py-4">
+                            <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                            <p>Loading cars...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-primary" onclick="app.router.navigate('orders', {action: 'create'})">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Order
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-info" onclick="app.router.navigate('orders')">
+                                    <i class="fas fa-search me-2"></i>Track Orders
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-success" onclick="app.router.navigate('cars')">
+                                    <i class="fas fa-car me-2"></i>Manage Cars
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="d-grid">
+                                <button class="btn btn-outline-warning" onclick="app.router.navigate('profile')">
+                                    <i class="fas fa-user-edit me-2"></i>Update Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
