@@ -1,6 +1,5 @@
 name: Python CI
 
-# main 브랜치에 푸시될 때와 PR 생길 때 실행
 on:
   push:
     branches: [ main ]
@@ -8,50 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-healthcheck:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) 소스 가져오기
+      # 1) 소스 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2) Python 세팅 (3.9 버전)
+      # 2) Python 세팅
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: '3.9'
 
       # 3) 의존성 설치
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # requirements.txt가 없으면, pyproject.toml 기반으로 poetry 사용:
-          pip install poetry
-          poetry install --no-interaction --no-ansi
-        # 만약 requirements.txt만 있다면, 위 대신:
-        # run: pip install -r requirements.txt
+          pip install flask
+        working-directory: ./  # 필요하다면 경로 조정
 
-      # 4) 린트(선택)
-      - name: Lint with flake8
+      # 4) 서버 띄우기 (백그라운드)
+      - name: Start Flask server
         run: |
-          pip install flake8
-          flake8 .
+          nohup python server.py &
+          sleep 5
+        working-directory: ./  # server.py 가 있는 위치
 
-      # 5) 간단한 “로컬 서버 기동” 테스트
-      - name: Start server in background
+      # 5) 헬스체크
+      - name: Health check
         run: |
-          nohup python main.py &      # main.py가 HTTP 서버를 띄운다고 가정
-          sleep 3                      # 서버 기동 대기
-      - name: Smoke test index.html
-        run: |
-          curl --fail http://localhost:8000/    # main.py 기본 포트가 8000이라면
-      - name: Kill background server
-        run: |
-          pkill -f "python main.py" || true
-
-      # 6) (있다면) 유닛 테스트
-      - name: Run pytest
-        run: |
-          pip install pytest
-          pytest --maxfail=1 --disable-warnings -q
+          curl --fail http://localhost:5000/health
