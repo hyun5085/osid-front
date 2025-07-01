@@ -1,8 +1,6 @@
 // API communication layer for Car Order Tracker
-const BACKEND_HOST = window.location.hostname;   // EC2 호스트
-const BACKEND_PORT = '8080';                     // backend 포트
 const api = {
-    baseURL: `${window.location.protocol}//${BACKEND_HOST}:${BACKEND_PORT}`,
+    baseURL: `http://13.124.64.18:8080`,
 
     // Default headers
     getHeaders(includeAuth = true) {
