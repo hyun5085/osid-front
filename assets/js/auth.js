@@ -338,3 +338,38 @@ const auth = {
         return true;
     }
 };
+
+// 페이지 로드 시 자동 실행
+(function() {
+    // 1) 토큰이 있으면 자동 갱신 타이머 세팅
+    auth.init();
+
+    // 2) 로그인 상태 반영
+    const isLoggedIn = auth.isAuthenticated();
+    document.getElementById('loginBtn')?.classList.toggle('d-none', isLoggedIn);
+    const dd = document.getElementById('userDropdownSection');
+    if (dd) {
+        dd.classList.toggle('d-none', !isLoggedIn);
+        document.getElementById('userDisplayName').textContent = auth.getUserName();
+    }
+
+    // 3) 로그아웃 버튼에 이벤트 연결
+    document.querySelector('#userDropdownSection .dropdown-item[href="#"]')?.addEventListener('click', e => {
+        // "로그아웃" 메뉴 항목에 맞춰 셀렉터 조정해주세요
+        e.preventDefault();
+        if (confirm('로그아웃 하시겠습니까?')) {
+            auth.clearAuthData();
+            location.reload();
+        }
+    });
+
+    // 4) 마이페이지 버튼에 이벤트 연결
+    document.querySelector('#userDropdownSection a[onclick^="openMyPage"]')?.addEventListener('click', e => {
+        e.preventDefault();
+        const role = auth.getUserRole();
+        const map = { USER:'views/user-mypage.html', DEALER:'views/dealer-mypage.html', MASTER:'views/my-page.html' };
+        if (map[role]) window.location.href = map[role];
+        else alert('로그인이 필요합니다.');
+    });
+})();
+
