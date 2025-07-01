@@ -176,7 +176,7 @@ const auth = {
                 };
 
                 this.setAuthData(accessToken, refreshToken, userData);
-
+                localStorage.setItem('isLoggedIn', 'true');
                 // 저장됐는지 확인
                 console.log('localStorage access token:', localStorage.getItem(this.ACCESS_TOKEN_KEY));
 
