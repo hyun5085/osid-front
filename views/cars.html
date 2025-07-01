@@ -679,7 +679,7 @@
 
         async function loadModels() {
             try {
-                const response = await fetch('http://localhost:8080/api/model');
+                const response = await fetch('http://13.124.64.18:8080/api/model');
                 const result = await response.json();
                 const models = result.data?.content;
 
