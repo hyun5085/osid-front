@@ -28,6 +28,8 @@ const api = {
             const url = `${this.baseURL}${endpoint}`;
             const config = {
                 ...options,
+                mode: 'cors',              // ← 여기
+                credentials: 'include',    // ← 여기 (쿠키·세션 없더라도 CORS 모드 활성화)
                 headers: {
                     ...this.getHeaders(options.includeAuth !== false),
                     ...options.headers
