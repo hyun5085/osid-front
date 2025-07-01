@@ -1,7 +1,7 @@
 // API communication layer for Car Order Tracker
 
 const api = {
-    baseURL: 'http://osid-frontend-bucket.s3-website.ap-northeast-2.amazonaws.com/:8080',
+    baseURL: 'https://ec2-13-124-64-18.ap-northeast-2.compute.amazonaws.com:8080',
 
     // Default headers
     getHeaders(includeAuth = true) {
