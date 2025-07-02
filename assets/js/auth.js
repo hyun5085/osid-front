@@ -39,10 +39,17 @@ const auth = {
 
     // Clear all auth data
     clearAuthData() {
-        localStorage.removeItem(this.ACCESS_TOKEN_KEY);
-        localStorage.removeItem(this.REFRESH_TOKEN_KEY);
-        localStorage.removeItem(this.USER_DATA_KEY);
+        [
+            this.ACCESS_TOKEN_KEY,
+            this.REFRESH_TOKEN_KEY,
+            this.USER_DATA_KEY,
+            'isLoggedIn',
+            'userRole',
+            'userName',
+            'userEmail'
+        ].forEach(key => localStorage.removeItem(key));
     },
+
 
     // Check if user is authenticated
     isAuthenticated() {
