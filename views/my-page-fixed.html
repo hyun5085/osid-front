@@ -343,6 +343,12 @@
                         </div>
                         <span>사용자 관리</span>
                     </a>
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openModelRegistration()">
+                        <div class="quick-action-icon">
+                            <i class="fas fa-license"></i>
+                        </div>
+                        <span>라이센스 조회</span>
+                    </a>
                 </div>
             </div>
 
@@ -480,6 +486,42 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                     <button type="button" class="btn btn-primary" onclick="submitOptionRegistration()">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- License Registration Modal -->
+    <div class="modal fade" id="licenseModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">라이선스 관리</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>라이선스 키</th>
+                                <th>상태</th>
+                                <th>소유자 ID</th>
+                                <th>발급 일시</th>
+                            </tr>
+                            </thead>
+                            <tbody id="licenseTableBodyModal">
+                            <tr>
+                                <td colspan="4" class="text-center">로딩 중...</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button class="btn btn-primary" id="prevLicensePageModal">이전</button>
+                    <button class="btn btn-primary" id="nextLicensePageModal">다음</button>
                 </div>
             </div>
         </div>
@@ -705,6 +747,93 @@
             await loadStats();
             await loadRecentOrders();
         });
+
+        // 모달 전용 페이징 변수
+        let licensePage = 0;
+        const licenseSize = 10;
+
+        // 1) 모달 열기 함수
+        function openLicenseModal() {
+            // 페이지 번호 초기화
+            licensePage = 0;
+            // 데이터를 먼저 로드하고
+            loadLicensesModal();
+            // 모달 표시
+            new bootstrap.Modal(document.getElementById('licenseModal')).show();
+        }
+
+        // 2) 실제 페칭 및 테이블 렌더링
+        async function loadLicensesModal() {
+            const tbody = document.getElementById('licenseTableBodyModal');
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center">로딩 중...</td></tr>`;
+
+            try {
+                const token = localStorage.getItem('car_tracker_access_token');
+                const res = await fetch(`${API_BASE_URL}/licenses?page=${licensePage}&size=${licenseSize}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) throw new Error(res.status);
+                const result = await res.json();
+                const content = result.data.content || [];
+
+                // 내용이 없으면 안내
+                if (!content.length) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center">등록된 라이선스가 없습니다.</td></tr>`;
+                } else {
+                    tbody.innerHTML = content.map(item => {
+                        const assignedAt = item.assignedAt
+                            ? new Date(
+                                item.assignedAt[0],
+                                item.assignedAt[1] - 1,
+                                item.assignedAt[2],
+                                item.assignedAt[3],
+                                item.assignedAt[4],
+                                item.assignedAt[5]
+                            ).toLocaleString()
+                            : '-';
+                        return `
+          <tr>
+            <td>${item.productKey}</td>
+            <td>
+              <span class="badge ${
+                            item.licenseStatus === 'ASSIGNED' ? 'bg-success' : 'bg-secondary'
+                        }">${item.licenseStatus}</span>
+            </td>
+            <td>${item.ownerId ?? '-'}</td>
+            <td>${assignedAt}</td>
+          </tr>
+        `;
+                    }).join('');
+                }
+
+                // 페이징 버튼 활성화/비활성화
+                document.getElementById('prevLicensePageModal').disabled = result.data.first;
+                document.getElementById('nextLicensePageModal').disabled = result.data.last;
+
+            } catch (err) {
+                console.error('라이선스 로드 오류:', err);
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">불러오기 실패</td></tr>`;
+            }
+        }
+
+        // 3) 페이징 버튼 이벤트 바인딩
+        document.getElementById('prevLicensePageModal').addEventListener('click', () => {
+            if (licensePage > 0) {
+                licensePage--;
+                loadLicensesModal();
+            }
+        });
+        document.getElementById('nextLicensePageModal').addEventListener('click', () => {
+            licensePage++;
+            loadLicensesModal();
+        });
+
+        // 4) 초기화: DOMContentLoaded 안에 openLicenseModal이 아니라,
+        //    딜러/모델 로딩 끝난 후 별도 호출하지 않아도 됩니다.
+
     </script>
 </body>
 </html>
