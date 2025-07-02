@@ -977,6 +977,8 @@
 
                     const modalEl = document.getElementById('loginModal');
                     bootstrap.Modal.getInstance(modalEl).hide();
+
+                    window.location.reload();
                     checkLoginStatus();
                 });
             }
