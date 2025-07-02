@@ -1,6 +1,6 @@
 // API communication layer for Car Order Tracker
 const api = {
-    baseURL: `https://13.124.64.18:8080`,
+    baseURL: `http://13.124.64.18:8080`,
 
     // Default headers
     getHeaders(includeAuth = true) {

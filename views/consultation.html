@@ -870,7 +870,7 @@
             };
 
             try {
-                const response = await fetch('https://13.124.64.18:8080/api/users/signup', {
+                const response = await fetch('http://13.124.64.18:8080/api/users/signup', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userSignupData)
