@@ -391,11 +391,11 @@
                         </div>
                         <span>사용자 관리</span>
                     </a>
-                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openModelRegistration()">
+                    <a href="javascript:void(0)" class="quick-action-btn" onclick="openLicenseModal()">
                         <div class="quick-action-icon">
-                            <i class="fas fa-license"></i>
+                            <i class="fas fa-key"></i>
                         </div>
-                        <span>라이센스 조회</span>
+                        <span>라이선스 조회</span>
                     </a>
                 </div>
             </div>
@@ -693,7 +693,7 @@
         </div>
     </div>
 
-    <!-- License Registration Modal -->
+    <!-- License Modal -->
     <div class="modal fade" id="licenseModal" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content bg-dark text-white">
@@ -713,9 +713,7 @@
                             </tr>
                             </thead>
                             <tbody id="licenseTableBodyModal">
-                            <tr>
-                                <td colspan="4" class="text-center">로딩 중...</td>
-                            </tr>
+                            <tr><td colspan="4" class="text-center">로딩 중...</td></tr>
                             </tbody>
                         </table>
                     </div>
